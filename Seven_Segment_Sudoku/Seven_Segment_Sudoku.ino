@@ -1,5 +1,7 @@
 // Seven Segment Sudoku - Hari Wiguna, 2016
 
+// v0.02 - Create an array to represent Sudoku grid and display it.
+
 // v0.01 - Display actual digits 1..9
 
 // v0.00 - Proof that we could control every segment of NINE digits.
@@ -30,6 +32,21 @@ byte digitBits[] = {
   B11100000, // 7
   B11111110, // 8
   B11110110, // 9
+};
+
+//== Sudoku Variables ==
+byte sudoku[][9] = {
+{1,2,3,4,5,6,7,8,9},
+{2,3,4,5,6,7,8,9,1},
+{3,4,5,6,7,8,9,1,2},
+
+{4,5,6,7,8,9,1,2,3},
+{5,6,7,8,9,1,2,3,4},
+{6,7,8,9,1,2,3,4,5},
+
+{7,8,9,1,2,3,4,5,6},
+{8,9,1,2,3,4,5,6,7},
+{9,1,2,3,4,5,6,7,8}
 };
 
 void setup() {
@@ -99,14 +116,20 @@ void DisplayDigit(byte digit)
     delay(500);
 }
 
-void loop() {
+void DisplayRow(byte row)
+{
   for (byte col = 0; col < 9; col++)
   {
     SetCol(col); // Turn on one of the columns...
-    
-    //SegmentTest();
-    DisplayDigit(col+1);
-
+    DisplayDigit( sudoku[row][col] );
     ClearCol(col); // Turn off all the columns
+  }
+}
+
+void loop() {
+  for (byte row=0; row<9; row++)
+  {
+    DisplayRow(row);
+    delay(1000);
   }
 }
