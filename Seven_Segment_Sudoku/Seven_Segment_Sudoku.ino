@@ -1,6 +1,11 @@
 
 // Seven Segment Sudoku - Hari Wiguna, 2016
 
+// v0.04 - Draw one digit per interrupt.
+//         Drawing the whole column (9 vertical digits) took longer than interrupt cycle.
+//         Now we leave the column alone while we draw a new row for the upcoming column at each interrupt.
+//         When we're done with all the rows, we turn off the column, slam the segments to the display, turn on the correct column.
+
 // v0.03 - Use POV (Persistence Of Vision) to draw all digits "simultaneously".
 //         Refresh function that is periodically called by interrupt draws the sudoku independent of main loop.
 
@@ -53,6 +58,7 @@ byte sudoku[][9] = {
   {9, 1, 2, 3, 4, 5, 6, 7, 8}
 };
 
+volatile int8_t gRow = 0;
 volatile int8_t gCol = 0;
 #include "ScreenRefresh.h"
 
