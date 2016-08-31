@@ -31,7 +31,7 @@ const byte SEG_SER_PIN = 7;
 
 //== Digit bitmaps ==
 volatile byte digitBits[] = {
-  B11111100, // 0
+  B00000000, // 0
   B00001100, // 1
   B11011010, // 2
   B11110010, // 3
@@ -45,7 +45,7 @@ volatile byte digitBits[] = {
 
 //== Sudoku Variables ==
 byte sudoku[][9] = {
-  {1, 2, 3, 4, 5, 6, 7, 8, 9},
+  {1, 2, 3, 0, 0, 6, 7, 0, 9},
   {2, 3, 4, 5, 6, 7, 8, 9, 1},
   {3, 4, 5, 6, 7, 8, 9, 1, 2},
 
@@ -71,6 +71,9 @@ void setup() {
   pinMode(SEG_SER_PIN, OUTPUT);
   pinMode(COL_8_PIN, OUTPUT);
 
+  EraseAll();
+  FillSudoku1();
+
   SetupTimer();
 }
 
@@ -90,10 +93,77 @@ void SegmentTest()
   }
 }
 
-void loop() {
-  for (byte x=0; x<9; x++)
+void EraseAll()
+{
+  for (byte r = 0; r < 9; r++)
   {
-    sudoku[0][8] = x;
-    delay(500);
+    for (byte c = 0; c < 9; c++)
+    {
+      sudoku[r][c] = 0;
+    }
   }
+}
+
+
+void FillRandomly()
+{
+  for (byte r = 0; r < 9; r++)
+  {
+    for (byte c = 0; c < 9; c++)
+    {
+      sudoku[r][c] = random(1, 10);
+    }
+  }
+}
+
+void FillVertically()
+{
+  byte n = 1;
+  for (byte c = 0; c < 9; c++)
+  {
+    delay(100);
+    for (byte r = 0; r < 9; r++)
+    {
+      sudoku[r][c] = c + 1;
+    }
+  }
+}
+
+void FillHorizontally()
+{
+  for (byte c = 0; c < 9; c++)
+  {
+    delay(100);
+    sudoku[0][c] = c + 1;
+    sudoku[1][8 - c] = c + 1;
+    sudoku[2][c] = c + 1;
+  }
+}
+
+void FillSudoku1()
+{
+  for (byte c = 0; c < 9; c++)
+  {
+    //delay(100);
+    sudoku[0][c] = c + 1;
+    sudoku[1][c] = ((c + 3) % 9) + 1;
+    sudoku[2][c] = ((c + 6) % 9) + 1;
+  }
+}
+
+void loop() {
+  //  EraseAll();
+  //  FillVertically();
+  //  delay(1000);
+
+//  EraseAll();
+//  FillHorizontally();
+//  delay(1000);
+
+//  for (byte n = 0; n < 3; n++)
+//  {
+//    EraseAll();
+//    FillRandomly();
+//    delay(1000);
+//  }
 }
